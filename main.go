@@ -19,7 +19,7 @@ func ProcessGatewayRequest() int {
 		return LambdaOutput(GWOutput{
 			Status:   http.StatusInternalServerError,
 			Header:   nil,
-			BodyJSON: ErrJSON{"err": fmt.Sprintf("Failed to read from stdin - %v", err)}})
+			BodyJSON: fmt.Sprintf("Failed to read from stdin - %v", err)})
 	}
 	gwInput := GWInputFromJSON(inputJS)
 	fun, found := NewAPIImpl(nil).Routes[gwInput.Context.Method+gwInput.Context.Path]
@@ -27,7 +27,7 @@ func ProcessGatewayRequest() int {
 		return LambdaOutput(GWOutput{
 			Status:   http.StatusNotFound,
 			Header:   nil,
-			BodyJSON: ErrJSON{"err": fmt.Sprintf("No function found for '%s' '%s'", gwInput.Context.Method, gwInput.Context.Path)}})
+			BodyJSON: fmt.Sprintf("No function found for '%s' '%s'", gwInput.Context.Method, gwInput.Context.Path)})
 	}
 	return LambdaOutput(fun(gwInput))
 }
